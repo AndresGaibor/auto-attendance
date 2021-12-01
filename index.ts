@@ -1,7 +1,7 @@
-import puppeteer from 'puppeteer';
+import { launch, Page } from 'puppeteer';
 import { readFileSync, writeFileSync } from 'fs';
-import cron from 'node-cron';
-import chalk from 'chalk';
+import { schedule } from 'node-cron';
+const chalk = require('chalk');
 import ora from 'ora';
 
 //Interfaces
@@ -31,7 +31,7 @@ const spinner = ora({
 const ELEARING_URL = 'https://elearning.espoch.edu.ec';
 const EMAILLOGIN_URL = 'https://login.microsoftonline.com/d7f86710-01e1-461d-8599-758de4542e2b/oauth2/authorize?response_type=code&client_id=3e94ba41-2a62-4580-a931-e304cd23fea3&redirect_uri=https%3A%2F%2Fseguridad.espoch.edu.ec%2Fcas%2FdelegatedAuthn%2Foidc%2FInstitucional&scope=openid&state=5jFCV8oMVCNTqsu_kkC_clJGjSkatR1_-w0-Cb0OS-w';
 
-let page: puppeteer.Page;
+let page: Page;
 
 
 const login = async (email: string, password: string) => {
@@ -204,7 +204,7 @@ const setUpAttendance = async (course: string, attendanceLink: string) => {
   spinner.start()
 
   try {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await launch({ headless: false });
   page = await browser.newPage();
 
   const logged = await login(user.email, user.password)
