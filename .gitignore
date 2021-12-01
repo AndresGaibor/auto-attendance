@@ -1,5 +1,3 @@
 node_modules
-user.json
-courses.json
-attendances.json
-calendar.json
+files/*
+dist/*
