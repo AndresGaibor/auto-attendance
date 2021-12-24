@@ -29,10 +29,13 @@ export class Student {
 
         await page.type('input[type="email"]', student.email)
         await page.click('#idSIButton9')
+        
+        // await page.waitForTimeout(3500)
+        await page.waitForSelector("#i0118")
 
-        await page.waitForSelector('input[type="password"]')
+        // await page.waitForSelector('input[type="password"]')
         await page.waitForNetworkIdle()
-        await page.type('input[type="password"]', student.password)
+        await page.type('input#i0118', student.password)
         
         await page.click('input[type="submit"]#idSIButton9')
         await page.waitForNavigation()

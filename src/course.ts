@@ -45,19 +45,26 @@ export class Courses {
             const [dateWithPoints, hour12 = "0"] = tds[0].innerText.split(" ", 5);
 
             let [hour24 = "0", minutes = "0"] = hour12.replace(/[^0-9]/g, '').split(':');
-
+            // console.log(courseName)
+            
             const [day, month, year] = dateWithPoints.substr(0, dateWithPoints.length - 6).split('.');
-
+            
+            
             hour24 = hour12.toUpperCase().includes('PM') ? hour24 + 12 : hour24;
-            const date = new Date(parseInt(year) + 2000, parseInt(month), parseInt(day), parseInt(hour24), parseInt(minutes) + 5).getTime();
+            const time = new Date(parseInt(year) + 2000, parseInt(month), parseInt(day), parseInt(hour24), parseInt(minutes) + 5);
             // const date = parseDate(tds[0].innerText)
+            console.log(courseName + " " + dateWithPoints + " " + time.getFullYear() + " " + time.getMonth() + " " + time.getDate() + " " + time.getDay() + " " + time.getUTCDay() + " " + time.getHours() + " " + time.getMinutes())
             // const date = window.parseDate(tds[0].innerText)
 
             const pending = tds[2].innerText === '?'
 
-            return { time: date, pending }
-
+            return { time: time.getTime(), pending }
         })
+
+        
+        await setTimeout(() => {
+                
+        }, 10000);
 
         const attendanceCourse = await page.$$eval('.generaltable > tbody > tr', fnToInject, course.id)
 
@@ -70,7 +77,7 @@ export class Courses {
 
         fm.set(this.courses)
 
-        spinner.succeed('Asistencias de ' + course + ' obtenidas')
+        spinner.succeed('Asistencias de ' + course.id + ' obtenidas')
 
     }
 
@@ -103,12 +110,12 @@ export class Courses {
     async getCourses(studentId: IStudent["id"]) {
         spinner.start('Obteniendo cursos')
 
-        await page.goto(ELEARING_URL + '/my');
+        await page.goto(ELEARING_URL + '/my', { waitUntil: 'networkidle0' });
 
         
         const SELECTOR = '#page-container-1 > div > div > div'
         
-        await page.waitForSelector(SELECTOR)
+        // await page.waitForSelector(SELECTOR)
        
         const coursesOfStudent: ICourse[] = await page.$$eval(SELECTOR, (courses, studentId: number) => courses.map(course => {
             const a = course.querySelector('a.coursename')
